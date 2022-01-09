@@ -6,14 +6,14 @@
       "description": "Some additional details about the blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-01-09T18:02:56+09:00"
+      "last_modified": "2022-01-09T18:07:56+09:00"
     },
     {
       "path": "index.html",
       "title": "nackta blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-01-09T18:02:23+09:00"
+      "last_modified": "2022-01-09T18:10:04+09:00"
     }
   ],
   "collections": ["posts/posts.json"]
