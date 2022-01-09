@@ -1,0 +1,143 @@
+---
+title: 정규표현식으로 스크레이핑 in python
+description: |
+  re모듈을 익히고 정규표현식으로 html파일 접근하기.
+author:
+  - name: nackta
+    url: {}
+date: 07-17-2021
+categories:
+  - Python
+  - Crawling
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+
+---
+
+정규표현식은 특정한 문자열의 집합을 표현하는 방법이다. 이 방법을 통해 html에서 원하는 정보만을 추출 할 수 있다.
+
+# 1. re모듈
+
+re모듈 안에는 정규표현식과 관련된 함수를 제공한다.
+ 
+```{python}
+import re
+```
+
+re.search("정규표현식", 문자열) 함수는 문자열이 정규표현식에 맞는지 확인해준다. 맞는 경우 match객체를 반환하고 맞지 않는 경우 None을 반환한다.
+
+```{python}
+#a 그리고 모든 문자 중 한가지가 0개 이상 포함하고 다음 c인 문자열
+re.search(r'a.*c', 'abc123DEF')
+```
+ 
+```{python}
+print(re.search(r'a.*d', 'abc123DEF')) # 결과 없음(None)
+```
+
+```{python}
+# a 그리고 모든 문자 중 0개 이상 포함하고 다음 D인 문자열
+result = re.search(r'a.*D', 'abc123DEF')
+start, end = result.span()
+print(start, end) # 위치
+print(result.string) # 해당 문자열
+```
+
+re.IGNORECASE(또는 re.I)를 지정하면 대소문자를 무시한다.
+ 
+```{python}
+m1 = re.search(r'a.*d', 'abc123DEF')
+m2 = re.search(r'a.*d', 'abc123DEF', re.I)
+print(m1) #none
+print(m2)
+```
+
+match객체의 group()을 통해 일치한 값을 추출 할 수 있다.
+ 
+```{python}
+m = re.search(r'a(.*)(c)', 'abc123DEF')
+m.group(0) # 일치된 모든 값
+m.group(1) # 정규표현식에서 첫번째 괄호 일치 값
+m.group(2) # 두번째 괄호 일치 값
+```
+ 
+re.findall() 함수는 정규표현식에 맞는 모든 부분을 추출한다.
+ 
+```{python}
+#영숫자 문자나 언더바가 2~3개로 이어진 문자열.
+re.findall(r'\w{2,3}', 'This is pen')
+```
+ 
+re.sub() 함수는 정규표현시에 매칭되는 문자열 치환한다.
+
+re.sub(정규표현식, replace, stirng)
+ 
+```{python}
+#영숫자 문자나 언더바가 4개로 이어진 문자열.
+#정규표현식에 맞는 문자열을 That으로 바꾼다.
+re.sub(r'\w{4}', 'That', 'This is a pen')
+```
+ 
+match() : 시작되는 문자열이 정규표현식과 일치하는지 확인.
+
+search() : 문자열 내에서 정규표현식과 일치하는 부분을 확인.
+  
+```{python}
+result = re.match(r'a.*c', ' abc123DEF') # 시작부분에 빈칸
+print(result)
+```
+
+```{python}
+result = re.search(r'a.*c', ' abc123DEF')
+print(result)
+```
+
+# 2. 정규표현식으로 스크레이핑
+
+목표 : 정규표현식으로 전체도서목록 책이름과 url 추출하기.
+ 
+```{python}
+# html 추출.
+from urllib.request import urlopen
+import sys
+f = urlopen('https://www.hanbit.co.kr/store/books/full_book_list.html')
+html = f.read().decode('utf-8')
+```
+
+html자료를 html변수에 저장한다.
+
+크롬에서 F12를 누르면 html의 elements를 볼 수 있다. 전체도서목록에서 도서제목과 url이 나열되있는 부분을 찾는다.
+
+```{python}
+from html import unescape
+# re.findall() 메서드를 통해 도서 하나에 해당하는 HTML을 추출
+for partial_html in re.findall(r'<td class="left"><a.*?</td>', html, re.DOTALL):
+    # 도서의 URL을 추출
+    url = re.search(r'<a href="(.*?)">', partial_html).group(1)
+    url = 'http://www.hanbit.co.kr' + url
+    # 태그를 제거해서 도서의 제목을 추출
+    title = re.sub(r'<.*?>', '', partial_html)
+    title = unescape(title)
+    print('url:', url)
+    print('title:', title)
+    print('---')
+```
+
+re.DOTALL은 정규표현식에서 "."에 줄바꿈문자를 포함한 모든 문자와 매치한다는 의미이다.
+
+html.unescape()함수는 html에서 escape된 문자열을 unescape해주는 함수이다. 위 예를 들면,
+ 
+```{python}
+list = re.findall(r'<td class="left"><a.*?</td>', html, re.DOTALL)
+title1 = re.sub(r'<.*?>', '', list[5])
+print("escape:", title1)
+title2 = unescape(title1)
+print("unescape:", title2)
+```
+ 
+이처럼 "&#40;" -> "(" 로 unecape 됨을 확인할 수 있다.
+
+escape code는 편집기와 브라우저가 헷갈리지 않도록 여러 기호를 표현하는 code이다.
+
