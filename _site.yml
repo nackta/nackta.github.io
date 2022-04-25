@@ -1,7 +1,7 @@
 name: "nackta.github.io"
 title: "nackta blog"
 description: |
-  nackta blog
+  통계, AI에 대한 내용 정리
   
 output_dir: "docs"
 theme: theme.css
