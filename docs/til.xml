@@ -9,13 +9,13 @@
     <generator>Distill</generator>
     <lastBuildDate>Fri, 13 May 2022 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>매일 공부하는 것을 기록하기</title>
+      <title>TIL(Today I Learn) 페이지 개설!!</title>
       <dc:creator>nackta</dc:creator>
       <link>https://nackta.github.io/til/2022-05-13-first-til</link>
-      <description>TIL(Today I Learn) 페이지 개설!!</description>
+      <description>매일 공부하는 것을 기록하기</description>
       <guid>https://nackta.github.io/til/2022-05-13-first-til</guid>
       <pubDate>Fri, 13 May 2022 00:00:00 +0000</pubDate>
-      <media:content url="https://nackta.github.io/til/2022-05-13-first-til/images/owl-g8ff44efdf_640.png" medium="image" type="image/png" width="640" height="514"/>
+      <media:content url="https://nackta.github.io/til/2022-05-13-first-til/images/owl.png" medium="image" type="image/png" width="640" height="514"/>
     </item>
   </channel>
 </rss>

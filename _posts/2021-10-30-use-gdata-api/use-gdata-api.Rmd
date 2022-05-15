@@ -6,20 +6,21 @@ author:
   - name: nackta
     url: {}
 date: 10-30-2021
+preview: images/gdata.png
 categories:
   - R
-  - AIP
+  - Crawling
 output:
   distill::distill_article:
     self_contained: false
     toc: true
-
 ---
+
 ```{r include=FALSE}
 Sys.setlocale("LC_ALL", locale = "korean")
 ```
 
-# 1. 공공데이터 포털의 open API
+## 공공데이터 포털의 open API
 
 [공공데이터 포털](https://www.data.go.kr/)에서 제공하는 open API가 7천여개 정도 있으며 해당 사이트에서는 이용자들이 API를 쉽게 이용할 수 있도록 샘플코드를 다음과 같이 제공하고 있습니다.
 
@@ -34,15 +35,15 @@ Sys.setlocale("LC_ALL", locale = "korean")
 
 위 코드는 사실 이용하기 힘듭니다... 그래서 새로운 방법으로 API수집을 위한 코딩이 필요하죠. 이번 포스팅에서는 관세청 수출입실적 open API를 수집하는 함수를 만들어보겠습니다.
 
-# 2. 관세청 수출입실적
+## 관세청 수출입실적
 
 관세청 수출입실적은 아래 그림처럼 시작년도월, 끝년도월, 품목코드, 국가명을 요청하면 요청값에 맞는 수출입실적 데이터를 출력해주는 API입니다.
 
 ![](costoms.png)
 
-# 3. API 수집 코드의 흐름
+## API 수집 코드의 흐름
 
-## 1) url만들기
+### url만들기
 
 요청하는 url를 확인해보면 다음과 같습니다.
 
@@ -87,7 +88,7 @@ myurl
 paste0('a', 'b', 'c')
 ```
 
-## 2) url을 이용하여 요청값 받기.
+### url을 이용하여 요청값 받기.
 
 공공데이터포털에서 제공하는 API중 상당부분이 XML형식으로 제공하고 있습니다. 관세청 데이터도 마찬가지 입니다. 그러므로 xml파일을 읽기위한 "xml2"패키지를 사용해보겠습니다. 저는 블로그에 서비스키를 노출할 수 없으므로 xml파일로 저장하여 불러오겠습니다. 실제로는 read_xml(myurl)을 실행시키면 됩니다.
 
@@ -122,7 +123,7 @@ xml_expimp
 
 위처럼 3번째 하위 노드로 내려가면 <변수명>출력값</변수명> 형태의 출력값에 접근할 수 있습니다. 이제 데이터 프레임 형태로 정리하는 일만 남았습니다.
 
-## 3) 데이터 프레임으로 정리
+### 데이터 프레임으로 정리
 
 xml_expimp의 첫번째 노드를 살펴보면 각 출력값마다 '/'이 포함되 있는 규칙을 발견할 수 있습니다.
 
@@ -183,7 +184,7 @@ library(tidyr)
 spread(tmp2, key = 'key', value = 'value')
 ```
 
-## 4) 함수 만들기
+### 함수 만들기
 
 지금까지 했던 과정을 종합하여 함수로 만듭니다. 공공데이터 포털에서 서비스키만 발급받는다면 사용할 수 있습니다!
 
@@ -220,6 +221,3 @@ one_getNitemtradeList <- function(ServiceKey, startpoint, endpoint, hscode, coun
 ```{r include=FALSE}
 Sys.setlocale("LC_ALL")
 ```
-
-
-

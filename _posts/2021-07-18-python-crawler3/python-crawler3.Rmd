@@ -1,11 +1,12 @@
 ---
-title: RSS 이용하기 in python
+title: RSS 이용하기
 description: |
   RSS을 통해 XML파일 스크레이핑.
 author:
   - name: nackta
     url: {}
 date: 07-18-2021
+preview: images/rss.png
 categories:
   - Python
   - Crawling
@@ -15,21 +16,21 @@ output:
     toc: true
 ---
 
-# 1. XML(RRS) 스크레이핑
+## XML(RSS) 스크레이핑
 
 몇몇 웹사이트는 빈번하게 변하는 정보를 사용자에게 제공하기 위해 RSS라는 서비스를 제공한다. 이 서비스를 사용하면 XML형식의 정보를 실시간으로 얻을 수 있게된다.
- 
-이번엔 기상청 RSS를 추출해보겠다. rss 링크는 다음과 같다.
 
-http://www.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=146
- 
+이번엔 기상청 RSS를 추출해보겠다. RSS 링크는 다음과 같다.
+
+<http://www.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=146>
+
 ```{python}
 from xml.etree import ElementTree
 from urllib.request import urlopen
 f = urlopen('http://www.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=146')
 xml_data = f.read().decode('utf-8')
 ```
- 
+
 ```{python}
 root = ElementTree.fromstring(xml_data)
 root
@@ -40,7 +41,7 @@ pandas의 데이터프레임 형태로 일시, 최저, 최고, 날씨 정보를 
 원하는 정보를 얻기 위해 xml이 어떤 형식으로 이루어져 있는지 확인한다.
 
 channel/item/description/body/location/data에 원하는 정보가 있다.
- 
+
 ```{python}
 import pandas as pd
 datalist = []
@@ -68,12 +69,12 @@ citylist = []
 for item in root.findall('channel/item/description/body/location'):
   city = item.find('city').text
   citylist = citylist + ([city]*13)
-```
- 
-```{python}
 weather['지역'] = citylist
-print(weather)
 ```
 
+```{r}
+library(reticulate)
+knitr::kable(head(py$weather))
+```
 
 
