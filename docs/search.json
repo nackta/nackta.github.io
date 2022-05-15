@@ -6,15 +6,22 @@
       "description": "Some additional details about the blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-02-07T21:52:03+09:00"
+      "last_modified": "2022-05-15T18:08:00+09:00"
     },
     {
       "path": "index.html",
-      "title": "nackta blog",
+      "title": "Posts",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-02-07T21:52:04+09:00"
+      "last_modified": "2022-05-15T18:08:00+09:00"
+    },
+    {
+      "path": "til.html",
+      "title": "Today I Learn",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2022-05-15T18:08:01+09:00"
     }
   ],
-  "collections": ["posts/posts.json"]
+  "collections": ["til/til.json", "posts/posts.json"]
 }

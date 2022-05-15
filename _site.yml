@@ -1,23 +1,29 @@
 name: "nackta.github.io"
 title: "nackta blog"
 description: |
-  통계, AI에 대한 내용 정리
+  데이터분석을 위한 통계, AI에 대한 탐구
   
 output_dir: "docs"
 theme: theme.css
+
+base_url: https://nackta.github.io
 
 navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "About"
+    - text: "Today I Learn"
+      href: til.html
+    - text: "about"
       href: about.html
+
 
 collections:
   post:
     categories: true
-    hidden: false
-
+  til:
+    categories: true
+    
 output: 
   distill::distill_article:
     toc: true

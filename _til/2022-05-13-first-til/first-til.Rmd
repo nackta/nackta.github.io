@@ -1,0 +1,16 @@
+---
+title: "매일 공부하는 것을 기록하기"
+description: |
+    TIL(Today I Learn) 페이지 개설!!
+author:
+  - name: nackta
+date: 2022-05-13
+
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+![](images/owl-g8ff44efdf_640.png){width="386"}
+
+매일매일 공부한 것을 기록하는 페이지를 만들었다. 일기처럼 나중에 봐도 뿌듯한 페이지가 되길..

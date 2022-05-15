@@ -91,6 +91,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <meta property="description" itemprop="description" content="RSS을 통해 XML파일 스크레이핑."/>
 
+<link rel="canonical" href="https://nackta.github.io/posts/2021-07-18-python-crawler3/"/>
 
 <!--  https://schema.org/Article -->
 <meta property="article:published" itemprop="datePublished" content="2021-07-18"/>
@@ -101,6 +102,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:title" content="nackta blog: RSS 이용하기 in python"/>
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="RSS을 통해 XML파일 스크레이핑."/>
+<meta property="og:url" content="https://nackta.github.io/posts/2021-07-18-python-crawler3/"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="nackta blog"/>
 
@@ -108,12 +110,19 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="nackta blog: RSS 이용하기 in python"/>
 <meta property="twitter:description" content="RSS을 통해 XML파일 스크레이핑."/>
+<meta property="twitter:url" content="https://nackta.github.io/posts/2021-07-18-python-crawler3/"/>
 
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="nackta blog: RSS 이용하기 in python"/>
+<meta name="citation_fulltext_html_url" content="https://nackta.github.io/posts/2021-07-18-python-crawler3/"/>
+<meta name="citation_online_date" content="2021/07/18"/>
+<meta name="citation_publication_date" content="2021/07/18"/>
+<meta name="citation_author" content="nackta"/>
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["RSS 이용하기 in python"]},{"type":"character","attributes":{},"value":["RSS을 통해 XML파일 스크레이핑."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["nackta"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["07-18-2021"]},{"type":"character","attributes":{},"value":["Python","Crawling"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["RSS 이용하기 in python"]},{"type":"character","attributes":{},"value":["RSS을 통해 XML파일 스크레이핑."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["nackta"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["07-18-2021"]},{"type":"character","attributes":{},"value":["Python","Crawling"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://nackta.github.io/posts/2021-07-18-python-crawler3/"]},{"type":"character","attributes":{},"value":["https://nackta.github.io/posts/2021-07-18-python-crawler3/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1038,10 +1047,6 @@ figure img.external {
   margin-top: 1.5em;
 }
 
-.figure img {
-  width: 100%;
-}
-
 .figure .caption {
   color: rgba(0, 0, 0, 0.6);
   font-size: 12px;
@@ -1871,6 +1876,12 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
+      if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+        var fn = $(this).children()[0]
+        $(this).html(fn.shadowRoot.querySelector("sup"))
+        $(this).id = fn.id
+        fn.remove()
+      }
       var refs = $(this).attr('data-cites').split(" ");
       var refHtml = refs.map(function(ref) {
         return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1885,6 +1896,31 @@ function init_distill() {
         placement: 'bottom-start'
       });
     });
+
+    // fix footnotes in tables (#411)
+    // replacing broken distill.pub feature
+    $('table d-footnote').each(function() {
+      // we replace internal showAtNode methode which is triggered when hovering a footnote
+      this.hoverBox.showAtNode = function(node) {
+        // ported from https://github.com/distillpub/template/pull/105/files
+        calcOffset = function(elem) {
+            let x = elem.offsetLeft;
+            let y = elem.offsetTop;
+            // Traverse upwards until an `absolute` element is found or `elem`
+            // becomes null.
+            while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                x += elem.offsetLeft;
+                y += elem.offsetTop;
+            }
+
+            return { left: x, top: y };
+        }
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+        const bbox = node.getBoundingClientRect();
+        const offset = calcOffset(node);
+        this.show([offset.left + bbox.width, offset.top + bbox.height]);
+      }
+    })
 
     // clear polling timer
     clearInterval(tid);
@@ -1984,6 +2020,8 @@ function init_common() {
   // mark non-body figures created by knitr chunks as 100% width
   $('.layout-chunk').each(function(i, val) {
     var figures = $(this).find('img, .html-widget');
+    // ignore leaflet img layers (#106)
+    figures = figures.filter(':not(img[class*="leaflet"])')
     if ($(this).attr('data-layout') !== "l-body") {
       figures.css('width', '100%');
     } else {
@@ -2006,7 +2044,7 @@ function init_common() {
   // get rid of index.html references in header
   if (window.location.protocol !== "file:") {
     $('.distill-site-header a[href]').each(function(i,val) {
-      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
     });
   }
 
@@ -2139,6 +2177,8 @@ d-appendix {
 @import url('https://fonts.googleapis.com/css2?family=Cardo');
 @import url('https://fonts.googleapis.com/css2?family=Alata');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR')
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic')
+
 
 html {
   /*-- Main font sizes --*/
@@ -2154,10 +2194,10 @@ html {
   --aside-color:     rgba(0, 0, 0, 0.6);
   --fig-cap-color:   rgba(0, 0, 0, 0.6);
   /*-- Specify custom fonts ~~~ must be imported above   --*/
-  --heading-font:    'Alata', sans-serif;        /* edited */
-  --mono-font:       monospace;
-  --body-font:       'Noto+Sans+KR', serif;             /* edited */
-  --navbar-font:     'Alata', sans-serif;        /* edited */
+  --heading-font:    'Noto+Sans+KR', sans-serif;        /* edited */
+  --mono-font:       'Nanum+Gothic', monospace;
+  --body-font:       'Nanum+Gothic', serif;             /* edited */
+  --navbar-font:     'Noto+Sans+KR', sans-serif;        /* edited */
 }
 
 /*-- ARTICLE METADATA --*/
@@ -2416,7 +2456,8 @@ d-appendix d-footnote-list a.footnote-backlink {
 </div>
 <div class="nav-right">
 <a href="../../index.html">Home</a>
-<a href="../../about.html">About</a>
+<a href="../../til.html">Today I Learn</a>
+<a href="../../about.html">about</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2539,7 +2580,18 @@ d-appendix d-footnote-list a.footnote-backlink {
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">nackta (2021, July 18). nackta blog: RSS 이용하기 in python. Retrieved from https://nackta.github.io/posts/2021-07-18-python-crawler3/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{nackta2021rss,
+  author = {nackta, },
+  title = {nackta blog: RSS 이용하기 in python},
+  url = {https://nackta.github.io/posts/2021-07-18-python-crawler3/},
+  year = {2021}
+}</pre>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->
