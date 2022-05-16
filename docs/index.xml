@@ -7,16 +7,16 @@
     <description>데이터분석을 위한 통계, AI에 대한 탐구
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 30 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 Oct 2021 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>공공데이터 포털 open API 이용하기 in r</title>
+      <title>공공데이터 포털 open API 이용하기</title>
       <dc:creator>nackta</dc:creator>
       <link>https://nackta.github.io/posts/2021-10-30-use-gdata-api</link>
       <description>관세청 수출입실적 쉽게 수집하기</description>
       <category>R</category>
       <category>Crawling</category>
       <guid>https://nackta.github.io/posts/2021-10-30-use-gdata-api</guid>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 29 Oct 2021 00:00:00 +0000</pubDate>
       <media:content url="https://nackta.github.io/posts/2021-10-30-use-gdata-api/images/gdata.png" medium="image" type="image/png" width="215" height="150"/>
     </item>
     <item>

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
   <url>
     <loc>https://nackta.github.io/about.html</loc>
-    <lastmod>2022-05-16T01:27:14+09:00</lastmod>
+    <lastmod>2022-05-16T15:10:10+09:00</lastmod>
   </url>
   <url>
     <loc>https://nackta.github.io/</loc>
@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://nackta.github.io/posts/2021-10-30-use-gdata-api/</loc>
-    <lastmod>2022-05-16T00:33:29+09:00</lastmod>
+    <lastmod>2022-05-16T15:11:27+09:00</lastmod>
   </url>
   <url>
     <loc>https://nackta.github.io/posts/2021-07-18-python-crawler3/</loc>
