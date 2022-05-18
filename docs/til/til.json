@@ -1,7 +1,7 @@
 [
   {
     "path": "til/2022-05-18-dlfromscratchch2/",
-    "title": "[밑바탁부터 시작하는 딥러닝] 2장 퍼셉트론",
+    "title": "[밑바닥부터 시작하는 딥러닝] 2장 퍼셉트론",
     "description": "딥러닝의 기원이 되는 알고리즘인 퍼셉트론에 대해 정리해봤습니다.",
     "author": [
       {
@@ -13,8 +13,8 @@
     "categories": [],
     "contents": "\r\n1️⃣ 퍼셉트론이란\r\n퍼셉트론은 다수의 신호를 입력(input)으로 받아 하나의 신호를\r\n출력(output)하는 알고리즘입니다.\r\n2개의 입력을 받아 하나의 신호를 출력하는 퍼셉트론을 수식으로\r\n나타내면,\r\n\\[y = \\begin{cases}0,(w_{1}x_{1} +\r\nw_{2}x_{2}\\leq\\theta)\\\\1,(w_{1}x_{1} +\r\nw_{2}x_{2}>\\theta)\\\\\\end{cases}\\] 또는 \\(\\theta\\)를 \\(-b\\)로 치환하여,\r\n\\[y = \\begin{cases}0,(b+w_{1}x_{1} +\r\nw_{2}x_{2}\\leq0)\\\\1,(b+w_{1}x_{1} +\r\nw_{2}x_{2}>0)\\\\\\end{cases}\\]\r\n\\(w\\) : weight, \\(b\\): bias\r\n2️⃣ 퍼셉트론의 한계\r\n퍼셉트론이 풀 수 있는 (예측할 수 있는) 문제는 AND, NAND,\r\nOR입니다.\r\nAND\r\n\r\nx1x2y000100010111\r\n\r\nNAND\r\n\r\nx1x2y001101011110\r\n\r\nOR\r\n\r\nx1x2y000101011111\r\n\r\n위 세가지 문제는 \\((w_1, w_2,\r\ntheta)\\)에 각각 \\((0.5, 0.5, 0.7),\r\n(-0.5, -0.5, -0.7), (1.5, 1.5, 0.7)\\) 등을 대입하면 풀 수\r\n있습니다.\r\n이를 파이썬 함수로 구현하면,\r\n\r\ndef AND(x1, x2):\r\n    w1, w2, theta = 0.5, 0.5, 0.5\r\n    tmp = x1*w1+x2*w2\r\n    if tmp <= theta:\r\n        return 0\r\n    else:\r\n        return 1\r\n\r\ndef NAND(x1, x2):\r\n    w1, w2, theta = -0.5, -0.5, -0.7\r\n    tmp = x1*w1+x2*w2\r\n    if tmp <= theta:\r\n        return 0\r\n    else:\r\n        return 1\r\n    \r\ndef OR(x1, x2):\r\n    w1, w2, theta = 1.5, 1.5, 0.7\r\n    tmp = x1*w1+x2*w2\r\n    if tmp <= theta:\r\n        return 0\r\n    else:\r\n        return 1\r\n\r\nprint('x1=0, x2=0 : ', AND(0,0))\r\nx1=0, x2=0 :  0\r\nprint('x1=0, x2=1 : ', AND(0,1))\r\nx1=0, x2=1 :  0\r\nprint('x1=1, x2=0 : ', AND(1,0))\r\nx1=1, x2=0 :  0\r\nprint('x1=1, x2=1 : ', AND(1,1))\r\nx1=1, x2=1 :  1\r\nprint('x1=0, x2=0 : ', NAND(0,0))\r\nx1=0, x2=0 :  1\r\nprint('x1=0, x2=1 : ', NAND(0,1))\r\nx1=0, x2=1 :  1\r\nprint('x1=1, x2=0 : ', NAND(1,0))\r\nx1=1, x2=0 :  1\r\nprint('x1=1, x2=1 : ', NAND(1,1))\r\nx1=1, x2=1 :  0\r\nprint('x1=0, x2=0 : ', OR(0,0))\r\nx1=0, x2=0 :  0\r\nprint('x1=0, x2=1 : ', OR(0,1))\r\nx1=0, x2=1 :  1\r\nprint('x1=1, x2=0 : ', OR(1,0))\r\nx1=1, x2=0 :  1\r\nprint('x1=1, x2=1 : ', OR(1,1))\r\nx1=1, x2=1 :  1\r\n\r\n하지만, 퍼셉트론으로 XOR은 해결할 수 없습니다.\r\nXOR\r\n\r\nx1x2y000101011110\r\n\r\n위 문제를 그림으로 나타내면 다음과 같이 빨간점과 검은점을 구분할 수\r\n있는 선을 그을 수 있어야 합니다.\r\n\r\n\r\n\r\n곡선으로 선을 그린다면 구분할 수 있겠지만 퍼셉트론으로는 직선밖에\r\n그릴 수 없으므로 해결할 수 없습니다. 즉, 퍼셉트론은 비선형의 영역을\r\n표현할 수 없습니다.\r\n3️⃣ 다층 퍼셉트론\r\n이를 해결하기 위해 나온 것이 다층 퍼셉트론입니다. 말 그대로 퍼셉트론\r\n층을 여러 개 갖는 알고리즘이며 앞에서 언급했던 퍼셉트론은 정확히 말하면\r\n단층 퍼셉트론입니다.\r\nXOR문제를 해결하려면 위에서 AND, NAND, OR 문제를 해결하기 위해\r\n만들었던 퍼셉트론을 적절히 쌓아 만들면 됩니다.\r\n\r\ndef XOR(x1, x2):\r\n    s1 = NAND(x1, x2)\r\n    s2 = OR(x1, x2)\r\n    y = AND(s1, s2)\r\n    return y\r\n\r\nprint('x1=0, x2=0 : ', XOR(0,0))\r\nx1=0, x2=0 :  0\r\nprint('x1=0, x2=1 : ', XOR(0,1))\r\nx1=0, x2=1 :  1\r\nprint('x1=1, x2=0 : ', XOR(1,0))\r\nx1=1, x2=0 :  1\r\nprint('x1=1, x2=1 : ', XOR(1,1))\r\nx1=1, x2=1 :  0\r\n\r\n첫번째 층에 NAND, OR를 풀기 위해 만들었던 퍼셉트론을 쌓고 두번째 층에\r\nAND를 풀기 위해 만들었던 퍼셉트론을 쌓아 XOR문제를 해결했습니다.\r\n이처럼 다층 퍼셉트론은 비선형의 영역까지도 표현할 수 있음을 알 수\r\n있습니다.\r\n✅ 요약\r\n퍼셉트론은 입출력을 갖춘 알고리즘\r\n단층 퍼셉트론은 선형 영역만 표현할 수 있고, 다층 퍼셉트론은\r\n비선형 영역도 표현 가능\r\n\r\n\r\n\r\n",
     "preview": {},
-    "last_modified": "2022-05-19T00:30:22+09:00",
-    "input_file": "dlfromscratchch2.knit.md"
+    "last_modified": "2022-05-19T00:37:11+09:00",
+    "input_file": {}
   },
   {
     "path": "til/2022-05-13-first-til/",
