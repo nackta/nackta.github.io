@@ -7,15 +7,15 @@
     <description>데이터분석을 위한 통계, AI에 대한 탐구
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 20 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 19 May 2022 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Pytorch tutorial</title>
       <dc:creator>nackta</dc:creator>
       <link>https://nackta.github.io/til/2022-05-20-pytorch-tutorial</link>
       <description>딥러닝 프레임워크 파이토치에 대해 알아보자</description>
-      <category>밑바닥부터 시작하는 딥러닝</category>
+      <category>pytorch</category>
       <guid>https://nackta.github.io/til/2022-05-20-pytorch-tutorial</guid>
-      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 19 May 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>[백준 문제풀이] 기본기</title>
