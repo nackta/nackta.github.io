@@ -6,6 +6,7 @@ author:
   - name: nackta
     url: {}
 date: 2022-05-20
+preview: images/pytorch.jpg
 categories:
   - pytorch
 output:
