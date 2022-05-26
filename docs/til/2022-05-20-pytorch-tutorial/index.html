@@ -2440,6 +2440,8 @@ d-appendix d-footnote-list a.footnote-backlink {
    document.addEventListener("DOMContentLoaded", function () {
      if (!/posts/.test(location.pathname)) {
        return;
+     } else if (!/til/.test(location.pathname)) {
+       return; 
      }
 
      var script = document.createElement("script");
