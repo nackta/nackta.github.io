@@ -44,7 +44,7 @@ OBG는 일요일에 시간을 맞춰 스터디를 진행할 예정입니다. 일
     
     - [github](https://github.com/nackta)
     
-    - [TIL 페이지](https://github.com/nackta)
+    - [TIL 페이지](https://nackta.github.io/til.html)
 
 - 최경석
 
