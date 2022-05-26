@@ -21,8 +21,9 @@ navbar:
 collections:
   post:
     categories: true
-    disqus: nackta
-    share: [twitter, linkedin]
+    disqus:
+      shortname: nackta
+      hidden: true
   til:
     categories: true
     
