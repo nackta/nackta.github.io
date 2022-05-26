@@ -1,5 +1,5 @@
 ---
-title: "TIL(Today I Learn) 페이지 개설!!"
+title: "멋쟁이사자처럼! TIL(Today I Learn) 페이지 개설!!"
 description: |
     매일 공부하는 것을 기록하기
 author:

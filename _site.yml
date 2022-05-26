@@ -21,6 +21,8 @@ navbar:
 collections:
   post:
     categories: true
+    disqus: nackta
+    share: [twitter, linkedin]
   til:
     categories: true
     
