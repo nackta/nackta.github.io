@@ -2416,6 +2416,38 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script>
+     document.addEventListener("DOMContentLoaded", function () {
+       if (!/posts/.test(location.pathname)) {
+         return;
+       }
+
+       var script = document.createElement("script");
+       script.src = "https://giscus.app/client.js";
+       script.setAttribute("data-repo", "nackta/nackta.github.io");
+       script.setAttribute("data-repo-id", "R_kgDOGpX7LA");
+       script.setAttribute("data-category", "Announcements");
+       script.setAttribute("data-category-id", "DIC_kwDOGpX7LM4CPTek");
+       script.setAttribute("data-mapping", "pathname");
+       script.setAttribute("data-reactions-enabled", "1");
+       script.setAttribute("data-emit-metadata", "0");
+       script.setAttribute("data-theme", "light");
+       script.setAttribute("data-lang", "ko");
+
+       /* wait for article to load, append script to article element */
+       var observer = new MutationObserver(function (mutations, observer) {
+         var article = document.querySelector("d-article");
+         if (article) {
+           observer.disconnect();
+           /* HACK: article scroll */
+           article.setAttribute("style", "overflow-y: hidden");
+           article.appendChild(script);
+         }
+       });
+
+       observer.observe(document.body, { childList: true });
+     });
+   </script>
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -2468,7 +2500,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#python">Python</a></li>
 </ul></li>
 <li><a href="#project-list">📚Project list</a></li>
-<li><a href="#contact">🤙contact</a></li>
+<li><a href="#contact">📲contact</a></li>
 </ul>
 </nav>
 </div>
@@ -2493,7 +2525,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><p>수출동향파악을 위한 수출물량 시계열 분석</p></li>
 <li><p>작업복 세탁소 수요 예측 및 입지 분석</p></li>
 </ul>
-<h2 id="contact">🤙contact</h2>
+<h2 id="contact">📲contact</h2>
 <ul>
 <li><a href="https://github.com/nackta">github</a></li>
 <li>rud7674@gmail.com</li>

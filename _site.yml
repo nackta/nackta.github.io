@@ -21,9 +21,6 @@ navbar:
 collections:
   post:
     categories: true
-    disqus:
-      shortname: nackta
-      hidden: true
   til:
     categories: true
     
@@ -32,3 +29,5 @@ output:
     toc: true
     code_folding: true
     theme: theme.css
+    includes:
+      in_header: giscus.html
