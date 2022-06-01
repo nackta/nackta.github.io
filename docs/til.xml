@@ -7,7 +7,17 @@
     <description>데이터분석을 위한 통계, AI에 대한 탐구
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 23 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 27 May 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>pytorch로 mnist 분류하기</title>
+      <dc:creator>nackta</dc:creator>
+      <link>https://nackta.github.io/til/2022-05-27-mnistclassification</link>
+      <description>pytorch로 mnist 분류 MLP모델을 구현하고 optimizer, lr scheduler, regularization, dropout, batch normalization의 적용 전 후 성능차이를 비교해봤습니다.</description>
+      <category>pytorch</category>
+      <guid>https://nackta.github.io/til/2022-05-27-mnistclassification</guid>
+      <pubDate>Fri, 27 May 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://nackta.github.io/til/2022-05-27-mnistclassification/output_15_0.png" medium="image" type="image/png" width="1150" height="590"/>
+    </item>
     <item>
       <title>신경망과 활성화 함수</title>
       <dc:creator>nackta</dc:creator>
