@@ -7,7 +7,17 @@
     <description>데이터분석을 위한 통계, AI에 대한 탐구
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 27 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>pytorch로 CNN 구현하기</title>
+      <dc:creator>nackta</dc:creator>
+      <link>https://nackta.github.io/til/2022-06-05-mnistcnn</link>
+      <description>pytorch로 CNN모델을 구현해봤습니다. 추가적으로 model을 다시 사용할 수 있도록 저장하는 방법도 알아봤습니다.</description>
+      <category>pytorch</category>
+      <guid>https://nackta.github.io/til/2022-06-05-mnistcnn</guid>
+      <pubDate>Sun, 05 Jun 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://nackta.github.io/til/2022-06-05-mnistcnn/output_9_0.png" medium="image" type="image/png" width="587" height="576"/>
+    </item>
     <item>
       <title>pytorch로 mnist 분류하기</title>
       <dc:creator>nackta</dc:creator>
