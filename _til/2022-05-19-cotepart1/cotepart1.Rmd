@@ -103,3 +103,153 @@ for i in l[1:]:
         
 print(low, high)
 ```
+
+
+## 지능형기차2
+
+```{python eval=FALSE, include=TRUE}
+k = []
+count=0
+for _ in range(10):
+    a,b = map(int, input().split())
+    count = count-a+b
+    k.append(count)
+print(max(k))
+```
+
+## 피보나치 수
+
+```{python eval=FALSE, include=TRUE}
+if n == 0:
+    ans = 0
+elif n == 1:
+    ans = 1
+else:
+    f = [0,1]
+    for i in range(n-1):
+        nplus = sum(f)
+        f[0]=f[1]
+        f[1]=nplus
+    ans = nplus
+print(ans)
+```
+
+
+## 일곱난쟁이
+
+```{python eval=FALSE, include=TRUE}
+h = []
+for _ in range(9):
+    h.append(int(input()))
+from itertools import combinations
+hs = combinations(h, 7)
+
+for i in hs:
+    if sum(i)==100:
+        break
+i=list(i)
+i.sort()
+
+for k in i:
+    print(k)
+```
+
+## 최대공약수와 최소공배수
+
+```{python eval=FALSE, include=TRUE}
+a, b = map(int, input().split())
+
+# 직관적인 방법이지만 시간초과
+for i in range(min(a,b), 0, -1):
+    if a%i == 0 and b%i == 0:
+        print(i)
+        break
+
+for j in range(max(a,b), (a*b)+1):
+    if j%a == 0 and j%b == 0:
+        print(j)
+        break
+    
+# 유클리드 호제법
+def gcd(a, b):
+    while b > 0:
+        a, b = b, a%b
+        
+    return a
+
+def lcm(a, b):
+    return a*b//gcd(a,b)
+
+print(gcd(a,b))
+print(lcm(a,b))
+
+```
+
+## N번째 큰 수
+
+```{python eval=FALSE, include=TRUE}
+n = int(input())
+
+for i in range(n):
+    l = list(map(int,input().split()))
+    l.sort()
+    print(l[-3])
+
+```
+
+## 소수 찾기
+
+```{python eval=FALSE, include=TRUE}
+n = int(input())
+l = list(map(int, input().split()))
+
+for i in l:
+    if i == 1:
+        n -= 1
+    else:
+        for j in range(2, i):
+            if i%j == 0:
+                n -= 1
+                break
+print(n)
+
+```
+
+## 쉽게 푸는 문제
+
+```{python eval=FALSE, include=TRUE}
+a,b = map(int,input().split())
+
+arr = [0]
+for i in range(45):
+    for j in range(i):
+        arr.append(i)
+
+print(sum(arr[a:b+1]))
+
+```
+
+## 소수
+
+```{python eval=FALSE, include=TRUE}
+a = int(input())
+b = int(input())
+
+ans = []
+for i in range(a, b+1):
+    if i==1:
+        pass
+    else:
+        ans.append(i)
+        for j in range(2,i):
+            if i%j == 0:
+                del ans[-1]
+                break
+
+if len(ans) == 0:
+    print(-1)
+else:
+    print(sum(ans))
+    print(min(ans))
+
+```
