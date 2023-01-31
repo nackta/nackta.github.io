@@ -1,0 +1,476 @@
+---
+title: "Pytorch tutorial"
+description: |
+  딥러닝 프레임워크 파이토치에 대해 알아보자
+author:
+  - name: nackta
+    url: {}
+date: 2022-05-20
+preview: images/pytorch.jpg
+categories:
+  - pytorch
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+socar 부트캠프의 강의 중 일부를 정리한 내용입니다.
+
+```{r include=FALSE}
+matplotlib <- reticulate::import("matplotlib")
+matplotlib$use("Agg", force = TRUE)
+```
+
+```{python}
+import numpy as np
+
+import torch
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
+
+from torchvision import datasets, transforms
+
+import matplotlib.pyplot as plt
+```
+
+## torch tensor
+
+tensor는 numpy의 ndarray처럼 다차원 데이터 배열입니다. tensor를 생성할 때는 list를 사용할 수도 있지만 ndarray를 사용할 수도 있습니다.
+
+ndarray와 tensor의 차이점은 tensor에는 back propagation(역전파)를 다루기 위해 forward pass(순전파)에서 전달된 값과 연산의 종류를 기억할 수 있습니다.(gradient 값 저장)
+
+### tensor의 parameter
+
+- data : list나 ndarray 등 array데이터
+
+- dtype : 데이터 타입
+
+- device : tensor가 위치해있는 device 지정
+
+- requires_grad : gradient 값 저장 유무
+
+### tensor의 생성
+
+ndarray와 비슷한 생성 방법입니다.
+
+```{python}
+a = torch.tensor([[1.0, 4.0], [4.0, 3.0]])
+b = torch.tensor([[4, 3], [1, 4], [1, 2]])
+print(a)
+print(b)
+```
+
+- tensor.dtype : tensor의 자료형 확인
+
+- tensor.shape : tensor의 size 확인
+
+```{python}
+print(a.dtype, a.shape)
+print(b.dtype, b.shape)
+```
+- torch.ones(*size) : 모든 원소가 1인 tensor
+
+- torch.zeros(*size) : 모든 원소가 0인 tensor
+
+- torch.eye(n, m) : 대각 원소가 1이고 나머지가 0인 $n*m$ tensor를 생성. m = None이면 $n*n$tensor를 생성
+
+- torch.rand(*size) : 모든 원소를 랜덤한 값으로 채워진 tensor. dtype을 int로 지정시 에러가 발생
+
+```{python}
+a = torch.ones([2, 3])
+b = torch.zeros([3, 2], dtype=torch.int64)
+c = torch.eye(4,3)
+d = torch.rand([2, 4, 3], dtype=torch.float)
+
+print(a)
+print(b)
+print(c)
+print(d)
+```
+
+앞서 언급했듯이 ndarray로도 tensor를 생성할 수 있습니다. tensor()는 원본의 값을 복사하는 반면 as_tensor()와 from_numpy()는 원본의 값을 참조하기 때문에 원본의 값을 바꾸면 같이 변하는 것을 알 수 있습니다.
+
+```{python}
+import numpy as np
+
+d = np.array([[1, 1, 1], [2, 2, 2], [3, 3, 3]])
+
+a = torch.tensor(d)
+b = torch.as_tensor(d)
+c = torch.from_numpy(d)
+
+print(a, id(a))
+print(b, id(b))
+print(c, id(c))
+print(d, id(d))
+
+d[0,0] = 0
+
+print(a)
+print(b)
+print(c)
+print(d)
+```
+
+tensor.shape을 통해 동일한 size의 tensor를 만들 수도 있지만 _like(tensor) 방법으로도 동일한 size의 tensor를 만들 수 있습니다.
+
+```{python}
+a = torch.ones(a.shape)
+print(a)
+b = torch.ones_like(a)
+c = torch.zeros_like(a, dtype=torch.float)
+d = torch.rand_like(a, dtype=torch.float)
+
+print(b)
+print(c)
+print(d)
+```
+
+### device 지정
+
+gpu연산을 위해서는 tensor의 device를 cuda로 지정해줘야합니다.
+`torch.cuda.is_available()`를 통해 gpu가 사용 가능한지 확인 후 tensor.to('cuda')를 통해 device를 지정할 수 있습니다.
+
+```{python}
+torch.cuda.is_available() # 저는 gpu가 없어요 ㅠㅜ
+
+if torch.cuda.is_available():
+    device = "cuda"
+else:
+    device = "cpu"
+    
+a.to(device)
+a.device
+```
+
+### tensor 다루기
+
+```{python}
+a = torch.ones([2, 3])
+b = torch.zeros([2, 3])
+```
+
+- torch.cat() : 텐서 합치기
+
+```{python}
+c = torch.cat([a, b], dim=0) # 열방향으로 합치기
+d = torch.cat([a, b], dim=1) # 행방향으로 합치기
+print(c)
+print(c.shape)
+print(d)
+print(d.shape)
+```
+
+- torch.stack : 텐서 쌓기
+
+새로운 차원(dim)에 따라 tensor들 쌓아줍니다. dim=0일때에는 tensor 전체를 기준으로 쌓고, dim=1일때는 tensor의 다음 차원을 기준으로 쌓는식입니다. 그러므로 dim은 0부터 tensor의 차원의 수를 넘을 수 없고, stack 안의 tensor들은 서로 size가 같아야 합니다.
+
+```{python}
+c = torch.stack([a, b], dim=0)
+d = torch.stack([a, b], dim=1)
+e = torch.stack([a, b], dim=2)
+print(c)
+print(c.shape)
+print(d)
+print(d.shape)
+print(e)
+print(e.shape)
+```
+
+- hstack : torch.cat([a, b], dim=0)
+- vstack : torch.cat([a, b], dim=1)
+
+```{python}
+c = torch.hstack([a, b])
+print(c)
+print(c.shape)
+d = torch.vstack([a, b])
+print(d)
+print(d.shape)
+```
+
+- torch.unsqueeze() : 더미차원 삭제
+- torch.squeeze() : 더미차원 추가
+
+```{python}
+# unsqueeze and squeeze
+print(a)
+a = torch.unsqueeze(a, dim=1)
+print(a)
+print(a.shape)
+
+print(torch.squeeze(a))
+print(a.shape)
+```
+
+### tonsor의 연산
+
+- 행렬 곱
+
+```{python}
+a = torch.tensor(np.array(list(range(12)))).reshape(3, 4)
+print(a)
+b = torch.tensor(np.array(list(range(8)))).reshape(4, 2)
+print(b)
+
+c = a @ b
+print(c)
+
+d = torch.matmul(a, b)
+print(d)
+```
+
+- element-wise product
+
+```{python}
+a = torch.tensor(np.array(list(range(6)))).reshape(2, 3)
+print(a)
+b = torch.tensor(list(range(10, 13))).reshape(1, 3)
+print(b)
+
+c = a * b
+print(c)
+
+d = a.mul(b)
+print(d)
+```
+
+- item() : tensor의 원소를 반환합니다. tensor 안에 원소가 1개만 있어야 합니다.
+
+```{python}
+# item
+agg = d.sum()
+v = agg.item()
+print(v, type(v))
+```
+
+- inplace operations
+
+```{python}
+print(a)
+a.add(5) 
+print(a)
+a.add_(5) # inplace operations
+print(a)
+```
+
+## Dataset
+
+파이토치에서 Dataset은 전체 데이터를 sample 단위로 처리해주는 역할을 합니다. Dataset을 상속받아 오버라이딩을 통해 커스텀 Dataset을 만들어보겠습니다.
+
+- 커스텀 Dataset 구조
+
+```{python eval=FALSE, include=TRUE}
+class CustomDataset(torch.utils.data.Dataset): 
+    def __init__(self): 
+        # 데이터셋의 전처리를 해주는 부분
+        
+    def __len__(self):
+        # 데이터셋의 길이를 반환해주는 부분
+        
+    def __getitem__(self, idx):
+        # 데이터셋에서 샘플을 추출해주는 부분
+        
+```
+
+다음 커스텀 데이터 셋을 확인해보면 `__init__`에서 features와 target 데이터, 전처리 함수를 저장하도록 정의 되있고, `__len__`에서 data의 길이를 반환해주도록 정의되있습니다. 마지막으로  `__getitem__`에서 저장된 데이터를 인덱싱 후 정의된 전처리 함수를 거쳐 반환되도록 구현되있습니다.
+
+```{python}
+class LionDataset(Dataset):
+    def __init__(self, data, target, transform=None, target_transform=None):
+        self.data = data # feature data
+        self.target = target # target data
+        self.transform = transform # featrue
+        self.target_transform = target_transform
+        pass
+    
+    def __len__(self):
+        return len(self.data)
+    def __getitem__(self, idx):
+        x = self.data[idx]
+        y = self.target[idx]
+        
+        if self.transform:
+          x = self.transform(x)
+        if self.target_transform:
+          y = self.target_transform(y)
+        
+        return x, y
+
+```
+
+```{python}
+data = np.array(list(range(100))).reshape(-1, 2)
+target = np.array([[i] * 5 for i in range(10)]).reshape(-1)
+
+print(data)
+print(target)
+```
+
+```{python}
+lion = LionDataset(data=data, target=target)
+print(lion[0:4])
+print(len(lion))
+```
+
+## DataLoader
+
+DataLoader는 dataset을 batch 단위로 묶어주는 역할을 합니다. 
+
+- batch_size : batch_size
+
+- shuffle : True시 epoch마다 데이터가 학습되는 순서가 섞임
+
+```{python}
+loader = DataLoader(dataset=lion, batch_size=10, shuffle=True)
+
+for i, batch in enumerate(loader):
+    x, y = batch
+    if i == 0:
+        print(x)
+        print(y)
+    print(x.shape)
+
+```
+
+## torch.nn.Module
+
+pytorch 모델은 parameters를 추적하며 forward pass를 진행한 뒤 back propagation을 통해 학습을 진행합니다. torch.nn.Module은 여러 층의 layer로 이뤄진 모델을 쉽게 관리할 수 있는 class입니다.
+
+- pytorch 모델의 기본구조
+
+```{python eval=FALSE, include=TRUE}
+class Model_Name(nn.Module):
+    def __init__(self):
+        super().__init__()
+        """
+        모델에 사용될 Layer(nn.Linear, nn.Conv2d)와 
+        activation function(nn.functional.relu, nn.functional.sigmoid)등을 정의
+        """
+
+    def forward(self, x):
+        """
+        모델에서 실행되어야하는 계산을 정의
+        """
+        return x
+
+```
+
+- example
+
+```{python}
+class LionLinear(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.input_dim = input_dim   # 입력차원 
+        self.output_dim = output_dim # 출력차원
+        
+        self.flatten = nn.Flatten()  # tensor 평탄화 정의
+        self.classifier = nn.Linear(input_dim, output_dim) # Linear layer 정의
+        self.act = nn.ReLU() # activation function(ReLU) 정의
+        
+    def forward(self, x):
+        x = self.flatten(x)    # data를 linear layers에 맞게 평탄화 후
+        x = self.classifier(x) # linear layer를 통과,
+        x = self.act(x)        # activation function을 통해 출력
+        
+        return x
+
+```
+
+pytorch 모델은 모델의 구조를 쉽게 파악할 수 있습니다.
+
+```{python}
+linear_model = LionLinear(28*28, 10).to(device)
+print(linear_model)
+print(linear_model.classifier)
+```
+
+다음은 MLP를 구현하는 module입니다.
+
+코드를 더 간결하게 하기 위해 다음과 같이 일부 layer 등을 따로 모듈로 구현 후 전체 모듈에 합쳐서 구현할 수 있습니다. 
+
+
+```{python}
+class LionLayer(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.layer = nn.Linear(self.input_dim, self.output_dim)
+        pass
+
+    def forward(self, x):
+        assert x.shape[-1] == self.input_dim, "Input dimension mismatch"
+        return self.layer(x)
+
+```
+
+
+```{python}
+class LionMLP(nn.Module):
+    def __init__(self, input_dim, hidden_dim, output_dim):
+        super().__init__()
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.output_dim = output_dim
+        self.flatten = nn.Flatten()
+        self.linear_1 = LionLayer(self.input_dim, self.hidden_dim)
+        self.linear_2 = LionLayer(self.hidden_dim, self.output_dim)
+        self.act_1 = nn.ReLU()
+        self.act_2 = nn.Softmax()
+        pass
+    
+    def forward(self, x):
+        x = self.flatten(x)
+        x = self.act_1(self.linear_1(x))
+        x = self.act_2(self.linear_2(x))
+        return x
+
+```
+
+
+```{python}
+mlp = LionMLP(28*28, 50, 10)
+print(mlp)
+```
+
+nn.Sequential()을 통해 forward() 부분을 짧게 작성할 수 있습니다.
+
+```{python}
+class LionMLP(nn.Module):
+    def __init__(self, input_dim, hidden_dim, output_dim):
+        super().__init__()
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.output_dim = output_dim
+        self.flatten = nn.Flatten()
+        self.linear_1 = LionLayer(self.input_dim, self.hidden_dim)
+        self.linear_2 = LionLayer(self.hidden_dim, self.output_dim)
+        self.act_1 = nn.ReLU()
+        self.act_2 = nn.Softmax()
+        self.model = nn.Sequential(self.flatten, self.linear_1, self.act_1, self.linear_2, self.act_2)
+        pass
+    def forward(self, x):
+        return self.model(x)
+
+```
+
+```{python}
+mlp = LionMLP(28 * 28, 40, 10)
+print(mlp)
+```
+- 모델 파라미터 확인
+
+```{python}
+for name, param in mlp.named_parameters():
+    print(f"Layer: {name} | Size: {param.size()} | Values: {param[:2]} \n")
+
+```
+
+## reference
+
+PyTorch로 시작하는 딥 러닝 입문 : https://wikidocs.net/57165
+
+https://anweh.tistory.com/21

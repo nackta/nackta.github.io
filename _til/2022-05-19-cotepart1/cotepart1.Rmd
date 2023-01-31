@@ -1,0 +1,255 @@
+---
+title: "[백준 문제풀이] 기본기"
+description: |
+  코딩테스트를 위한 백준 문제 풀어보기 
+author:
+  - name: nackta
+    url: {}
+date: 2022-05-19
+categories:
+  - coding test
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+---
+
+## 약수 구하기
+
+두 개의 자연수 N과 K가 주어졌을 때, N의 약수들 중 K번째로 작은 수를 출력하는 프로그램을 작성하시오.
+
+- 입력
+
+첫째 줄에 N과 K가 빈칸을 사이에 두고 주어진다. N은 1 이상 10,000 이하이다. K는 1 이상 N 이하이다.
+
+- 출력
+
+첫째 줄에 N의 약수들 중 K번째로 작은 수를 출력한다. 만일 N의 약수의 개수가 K개보다 적어서 K번째 약수가 존재하지 않을 경우에는 0을 출력하시오.
+
+```{python eval=FALSE, include=TRUE}
+N, K = map(int, input().split())
+
+result = 0
+
+for i in range(1, N + 1):
+    if N % i == 0:
+        K -= 1
+        if K == 0:
+            result = i
+            break
+
+print(result)
+```
+
+## 이진수
+
+양의 정수 n이 주어졌을 때, 이를 이진수로 나타냈을 때 1의 위치를 모두 찾는 프로그램을 작성하시오. 최하위 비트(least significant bit, lsb)의 위치는 0이다.
+
+- 입력
+
+첫째 줄에 테스트 케이스의 개수 T가 주어진다. 각 테스트 케이스는 한 줄로 이루어져 있고, n이 주어진다. $(1 ≤ T ≤ 10, 1 ≤ n ≤ 10^6)$
+
+- 출력
+
+각 테스트 케이스에 대해서, 1의 위치를 공백으로 구분해서 줄 하나에 출력한다. 위치가 낮은 것부터 출력한다.
+
+```{python eval=FALSE, include=TRUE}
+t = int(input())
+
+for _ in range(t):
+    n = int(input())
+    b = bin(n)[2:]
+    
+    for i in range(len(b)):
+        if b[::-1][i] == '1':
+            print(i, end=' ')
+```
+
+### bin() 직접 구현하기(양의 정수일때만)
+
+```{python eval=FALSE, include=TRUE}
+def my_bin(num):
+    a = num//2
+    b = num%2
+    if a == 0:
+        return '1'
+    else:
+        return my_bin(a)+str(b)
+```
+
+## 최대, 최소
+
+N개의 정수가 주어진다. 이때, 최솟값과 최댓값을 구하는 프로그램을 작성하시오.
+
+- 입력
+
+첫째 줄에 정수의 개수 N (1 ≤ N ≤ 1,000,000)이 주어진다. 둘째 줄에는 N개의 정수를 공백으로 구분해서 주어진다. 모든 정수는 -1,000,000보다 크거나 같고, 1,000,000보다 작거나 같은 정수이다.
+
+- 출력
+
+첫째 줄에 주어진 정수 N개의 최솟값과 최댓값을 공백으로 구분해 출력한다.
+
+```{python eval=FALSE, include=TRUE}
+input()
+l = list(map(int, input().split()))
+
+high = low = l[0]
+
+for i in l[1:]:
+    if high < i:
+        high = i
+    if low > i:
+        low = i
+        
+print(low, high)
+```
+
+
+## 지능형기차2
+
+```{python eval=FALSE, include=TRUE}
+k = []
+count=0
+for _ in range(10):
+    a,b = map(int, input().split())
+    count = count-a+b
+    k.append(count)
+print(max(k))
+```
+
+## 피보나치 수
+
+```{python eval=FALSE, include=TRUE}
+if n == 0:
+    ans = 0
+elif n == 1:
+    ans = 1
+else:
+    f = [0,1]
+    for i in range(n-1):
+        nplus = sum(f)
+        f[0]=f[1]
+        f[1]=nplus
+    ans = nplus
+print(ans)
+```
+
+
+## 일곱난쟁이
+
+```{python eval=FALSE, include=TRUE}
+h = []
+for _ in range(9):
+    h.append(int(input()))
+from itertools import combinations
+hs = combinations(h, 7)
+
+for i in hs:
+    if sum(i)==100:
+        break
+i=list(i)
+i.sort()
+
+for k in i:
+    print(k)
+```
+
+## 최대공약수와 최소공배수
+
+```{python eval=FALSE, include=TRUE}
+a, b = map(int, input().split())
+
+# 직관적인 방법이지만 시간초과
+for i in range(min(a,b), 0, -1):
+    if a%i == 0 and b%i == 0:
+        print(i)
+        break
+
+for j in range(max(a,b), (a*b)+1):
+    if j%a == 0 and j%b == 0:
+        print(j)
+        break
+    
+# 유클리드 호제법
+def gcd(a, b):
+    while b > 0:
+        a, b = b, a%b
+        
+    return a
+
+def lcm(a, b):
+    return a*b//gcd(a,b)
+
+print(gcd(a,b))
+print(lcm(a,b))
+
+```
+
+## N번째 큰 수
+
+```{python eval=FALSE, include=TRUE}
+n = int(input())
+
+for i in range(n):
+    l = list(map(int,input().split()))
+    l.sort()
+    print(l[-3])
+
+```
+
+## 소수 찾기
+
+```{python eval=FALSE, include=TRUE}
+n = int(input())
+l = list(map(int, input().split()))
+
+for i in l:
+    if i == 1:
+        n -= 1
+    else:
+        for j in range(2, i):
+            if i%j == 0:
+                n -= 1
+                break
+print(n)
+
+```
+
+## 쉽게 푸는 문제
+
+```{python eval=FALSE, include=TRUE}
+a,b = map(int,input().split())
+
+arr = [0]
+for i in range(45):
+    for j in range(i):
+        arr.append(i)
+
+print(sum(arr[a:b+1]))
+
+```
+
+## 소수
+
+```{python eval=FALSE, include=TRUE}
+a = int(input())
+b = int(input())
+
+ans = []
+for i in range(a, b+1):
+    if i==1:
+        pass
+    else:
+        ans.append(i)
+        for j in range(2,i):
+            if i%j == 0:
+                del ans[-1]
+                break
+
+if len(ans) == 0:
+    print(-1)
+else:
+    print(sum(ans))
+    print(min(ans))
+
+```
