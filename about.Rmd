@@ -58,7 +58,7 @@ knitr::include_graphics("images/poket.jpg")
 
 -   초과근무시간 예측 모델링
 
--   [프로젝트 상세]()
+-   [프로젝트 상세](https://drive.google.com/file/d/15GbolhdYloIrFsUJy0-skFzFJBMCbSAt/view?usp=share_link)
 
 ### `r emo::ji("ship")`수출동향파악을 위한 수출물량 시계열 분석(2022.02)
 
@@ -68,7 +68,7 @@ knitr::include_graphics("images/poket.jpg")
 
 -   국가별 주요 수출 품목 시계열 분석
 
--   [프로젝트 상세]()
+-   [프로젝트 상세](https://drive.google.com/file/d/1urQF1zCTP3lLPFPViN8HKqlBHrSf_meq/view?usp=share_link)
 
 ### `r emo::ji("laundry")`작업복 세탁소 수요 예측 및 입지 분석(2021.08)
 
@@ -80,4 +80,4 @@ knitr::include_graphics("images/poket.jpg")
 
 -   작업복 세탁소 최적 입지 시각화
 
--   [프로젝트 상세]()
+-   [프로젝트 상세](https://drive.google.com/file/d/1ZcOIvbB3nTSGDUfuXujgmcV7CYm0YnOd/view?usp=share_link)
