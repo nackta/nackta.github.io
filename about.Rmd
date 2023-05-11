@@ -5,7 +5,7 @@ description: |
 ---
 
 ```{r echo=FALSE, fig.align='center', out.width="30%"}
-knitr::include_graphics("images/poket.jpg")
+knitr::include_graphics("images/profile.jpg")
 ```
 
 데이터 분석가가 되기위해 통계, ML/DL, 데이터 시각화, 크롤링 등 다양한 분석 스킬을 공부하고 있습니다.
@@ -48,7 +48,7 @@ knitr::include_graphics("images/poket.jpg")
 
 -   차량 사진을 찍은 각도 추출 모델 개발
 
--   [프로젝트 상세]()
+-   [프로젝트 상세](https://drive.google.com/file/d/1CXLpfBfJhPYrBMrjOHVmabXRp89nWutW/view?usp=share_link)
 
 ### `r emo::ji("postbox")`우편서비스 배달업무환경 분석(2022.02)
 
